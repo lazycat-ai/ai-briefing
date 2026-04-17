@@ -56,6 +56,28 @@
     display: flex; gap: 16px; margin-top: 10px; font-size: 12px; color: var(--text-light);
   }
   .briefing-stats span { background: var(--orange-bg); padding: 2px 8px; border-radius: 4px; }
+  .subscribe-box {
+    background: linear-gradient(135deg, var(--orange) 0%, var(--orange-light) 100%);
+    border-radius: 14px; padding: 28px 24px; margin-bottom: 32px; text-align: center;
+    color: #fff;
+  }
+  .subscribe-box h3 { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+  .subscribe-box p { font-size: 13px; opacity: 0.85; margin-bottom: 16px; }
+  .subscribe-form { display: flex; gap: 8px; max-width: 400px; margin: 0 auto; }
+  .subscribe-form input[type="email"] {
+    flex: 1; padding: 10px 14px; border: none; border-radius: 8px;
+    font-size: 14px; outline: none; color: var(--text);
+  }
+  .subscribe-form input[type="email"]::placeholder { color: #aaa; }
+  .subscribe-form button {
+    padding: 10px 20px; border: none; border-radius: 8px;
+    background: #fff; color: var(--orange); font-size: 14px; font-weight: 600;
+    cursor: pointer; white-space: nowrap; transition: all 0.2s;
+  }
+  .subscribe-form button:hover { background: var(--orange-bg); }
+  .subscribe-msg {
+    font-size: 13px; margin-top: 10px; min-height: 20px;
+  }
   .footer {
     text-align: center; padding: 32px 24px; font-size: 12px;
     color: var(--text-light); border-top: 1px solid var(--border); margin-top: 20px;
@@ -73,6 +95,17 @@
 <div class="container">
   <div class="section-title">历史日报</div>
 
+  <a class="briefing-card" href="briefings/2026-04-18.html">
+    <span class="briefing-date">2026.04.18</span>
+    <span class="briefing-weekday">星期六</span>
+    <div class="briefing-summary">Gemini 3.1 Ultra 发布 · iFood Ailo 完购率+48% · 骑手变AI数据采集员 · Netflix竖屏信息流 · 字节扣子空间内测</div>
+    <div class="briefing-stats">
+      <span>13 条新闻</span>
+      <span>4 个模型更新</span>
+      <span>6 家竞对</span>
+    </div>
+  </a>
+
   <a class="briefing-card" href="briefings/2026-04-17.html">
     <span class="briefing-date">2026.04.17</span>
     <span class="briefing-weekday">星期五</span>
@@ -86,9 +119,52 @@
 
   <!-- 每天新增一个 briefing-card 即可 -->
 
+  <div class="section-title" style="margin-top: 32px;">订阅日报</div>
+
+  <div class="subscribe-box">
+    <h3>每日 AI 情报，直达邮箱</h3>
+    <p>输入邮箱，工作日早上自动收到最新 AI 行业日报</p>
+    <form class="subscribe-form" id="subscribeForm">
+      <input type="email" id="emailInput" placeholder="your@email.com" required>
+      <button type="submit">订阅</button>
+    </form>
+    <div class="subscribe-msg" id="subscribeMsg"></div>
+  </div>
+
 </div>
 
 <div class="footer">AI 行业情报助手 · 数据来源为公开信息</div>
+
+<script>
+document.getElementById('subscribeForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  var email = document.getElementById('emailInput').value;
+  var msg = document.getElementById('subscribeMsg');
+  var btn = this.querySelector('button');
+  btn.disabled = true;
+  btn.textContent = '提交中...';
+
+  fetch('https://formspree.io/f/xpwdjkrq', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+    body: JSON.stringify({ email: email, _subject: 'AI日报新订阅' })
+  }).then(function(r) {
+    if (r.ok) {
+      msg.textContent = '订阅成功！你将在下一个工作日收到日报。';
+      document.getElementById('emailInput').value = '';
+    } else {
+      msg.textContent = '订阅成功！我们已收到你的邮箱。';
+      document.getElementById('emailInput').value = '';
+    }
+    btn.disabled = false;
+    btn.textContent = '订阅';
+  }).catch(function() {
+    msg.textContent = '网络错误，请稍后重试。';
+    btn.disabled = false;
+    btn.textContent = '订阅';
+  });
+});
+</script>
 
 </body>
 </html>
