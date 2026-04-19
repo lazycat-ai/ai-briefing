@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 行业日报 — 2026.04.19</title>
+<style>
+  :root {
+    --orange: #FF6611;
+    --orange-light: #FF8844;
+    --orange-bg: #FFF5EE;
+    --orange-bg2: #FFECE0;
+    --bg: #FAFAFA;
+    --white: #FFFFFF;
+    --text: #1A1A1A;
+    --text-secondary: #555555;
+    --text-light: #888888;
+    --border: #F0E8E2;
+    --shadow: 0 2px 12px rgba(255,102,17,0.06);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.8;
+  }
+  .header {
+    background: linear-gradient(135deg, var(--orange) 0%, var(--orange-light) 100%);
+    color: #fff; padding: 48px 24px 36px; text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .header::after {
+    content: ''; position: absolute; bottom: -2px; left: 0; right: 0;
+    height: 24px; background: var(--bg); border-radius: 24px 24px 0 0;
+  }
+  .header-label {
+    display: inline-block; font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
+    background: rgba(255,255,255,0.2); border-radius: 20px; padding: 4px 16px; margin-bottom: 14px;
+  }
+  .header h1 { font-size: 28px; font-weight: 700; }
+  .header .date { font-size: 14px; opacity: 0.85; margin-top: 6px; }
+  .stats {
+    display: flex; justify-content: center; gap: 16px; padding: 24px 16px 8px;
+    max-width: 600px; margin: 0 auto; flex-wrap: wrap;
+  }
+  .stat {
+    background: var(--white); border: 1px solid var(--border); border-radius: 12px;
+    padding: 12px 20px; text-align: center; flex: 1; min-width: 80px; box-shadow: var(--shadow);
+  }
+  .stat-num { font-size: 24px; font-weight: 700; color: var(--orange); }
+  .stat-label { font-size: 11px; color: var(--text-light); margin-top: 2px; }
+  .nav-bar {
+    display: flex; justify-content: center; gap: 8px; padding: 12px 20px;
+    position: sticky; top: 0; z-index: 100; background: var(--bg);
+    border-bottom: 1px solid var(--border); flex-wrap: wrap;
+  }
+  .nav-pill {
+    padding: 6px 16px; border-radius: 20px; border: 1px solid var(--border);
+    background: var(--white); color: var(--text-light); font-size: 13px;
+    cursor: pointer; transition: all 0.25s ease; text-decoration: none; white-space: nowrap;
+  }
+  .nav-pill:hover { border-color: var(--orange); color: var(--orange); }
+  .nav-pill.active { background: var(--orange); border-color: var(--orange); color: #fff; }
+  .container { max-width: 700px; margin: 0 auto; padding: 16px 20px 60px; }
+  .section { margin-top: 32px; }
+  .section-header {
+    display: flex; align-items: center; gap: 10px; margin-bottom: 16px;
+    padding-bottom: 10px; border-bottom: 2px solid var(--orange);
+  }
+  .section-icon {
+    width: 32px; height: 32px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0;
+  }
+  .section-header h2 { font-size: 18px; font-weight: 600; }
+  .section-header .count {
+    margin-left: auto; font-size: 12px; color: var(--text-light);
+    background: var(--orange-bg); padding: 2px 10px; border-radius: 10px;
+  }
+  .card {
+    background: var(--white); border: 1px solid var(--border); border-radius: 14px;
+    padding: 20px; margin-bottom: 12px; box-shadow: var(--shadow);
+    transition: all 0.2s ease; cursor: pointer; position: relative;
+  }
+  .card:hover { box-shadow: 0 4px 20px rgba(255,102,17,0.1); border-color: #FFD4B8; }
+  .card-num {
+    position: absolute; top: 16px; right: 18px; font-size: 13px; font-weight: 700;
+    color: var(--orange); background: var(--orange-bg);
+    width: 28px; height: 28px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .card-title { font-size: 15px; font-weight: 600; margin-bottom: 8px; padding-right: 40px; }
+  .card-body { font-size: 14px; color: var(--text-secondary); margin-bottom: 12px; }
+  .card-meta { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+  .source-link {
+    display: inline-flex; align-items: center; font-size: 12px; color: var(--orange);
+    text-decoration: none; background: var(--orange-bg); border-radius: 6px;
+    padding: 3px 10px; transition: background 0.2s;
+  }
+  .source-link:hover { background: var(--orange-bg2); }
+  .company-tag {
+    display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 4px;
+    font-weight: 600; margin-bottom: 8px; margin-right: 4px;
+  }
+  .tag-openai { background: #E8F5E9; color: #2E7D32; }
+  .tag-anthropic { background: #FFF3E0; color: #D4772C; }
+  .tag-google { background: #E3F2FD; color: #1565C0; }
+  .tag-ali { background: #FFF3E0; color: #E65100; }
+  .tag-netflix { background: #FFEBEE; color: #B71C1C; }
+  .tag-airbnb { background: #FFE8EE; color: #E91E63; }
+  .tag-spotify { background: #E8F5E9; color: #1DB954; }
+  .tag-doordash { background: #FFEBEB; color: #FF3008; }
+  .tag-ubereats { background: #F0F7EF; color: #06C167; }
+  .tag-ifood { background: #FFEBEB; color: #EA1D2C; }
+  .tag-meituan { background: #FFF8E1; color: #D4A000; border: 1px solid #FFD84D; }
+  .tag-multi { background: #F3E5F5; color: #7B1FA2; }
+  .implication {
+    margin-top: 12px; overflow: hidden; max-height: 0; opacity: 0;
+    transition: max-height 0.35s ease, opacity 0.3s ease, margin 0.3s ease, padding 0.3s ease;
+    background: var(--orange-bg); border-radius: 10px; padding: 0 16px;
+  }
+  .card.open .implication { max-height: 300px; opacity: 1; padding: 14px 16px; margin-top: 12px; }
+  .implication-label { font-size: 12px; font-weight: 600; color: var(--orange); margin-bottom: 4px; }
+  .implication-text { font-size: 13px; color: var(--text-secondary); line-height: 1.8; }
+  .toggle-hint { font-size: 12px; color: var(--text-light); text-align: right; margin-top: 8px; }
+  .verdict {
+    background: linear-gradient(135deg, var(--orange-bg) 0%, #FFF0E6 100%);
+    border: 2px solid #FFD4B8; border-radius: 16px; padding: 24px; margin-top: 12px;
+  }
+  .verdict h3 { font-size: 16px; color: var(--orange); margin-bottom: 10px; }
+  .verdict p { font-size: 14px; color: var(--text-secondary); margin-bottom: 10px; }
+  .verdict .highlight { color: var(--orange); font-weight: 600; }
+  .action-item {
+    background: var(--white); border-radius: 10px; padding: 14px 16px;
+    margin-top: 10px; border-left: 3px solid var(--orange);
+  }
+  .action-item p { margin: 0; font-size: 14px; color: var(--text); }
+  .action-num { color: var(--orange); font-weight: 700; margin-right: 4px; }
+  .back-link {
+    position: absolute; top: 16px; left: 16px; z-index: 10;
+    color: rgba(255,255,255,0.85); font-size: 14px; text-decoration: none;
+    display: inline-flex; align-items: center; gap: 4px;
+    background: rgba(255,255,255,0.15); border-radius: 20px; padding: 6px 14px;
+    transition: background 0.2s;
+  }
+  .back-link:hover { background: rgba(255,255,255,0.3); }
+  .footer {
+    text-align: center; padding: 32px 24px; font-size: 12px;
+    color: var(--text-light); border-top: 1px solid var(--border); margin-top: 20px;
+  }
+  @media (max-width: 500px) {
+    .header h1 { font-size: 22px; }
+    .card { padding: 16px; }
+    .stat { padding: 10px 12px; }
+    .stat-num { font-size: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <a class="back-link" href="../index.html">← 全部日报</a>
+  <div class="header-label">Daily Intelligence</div>
+  <h1>AI 行业日报</h1>
+  <div class="date">2026 年 4 月 19 日 · 星期日</div>
+</div>
+
+<div class="stats">
+  <div class="stat"><div class="stat-num">13</div><div class="stat-label">新闻条目</div></div>
+  <div class="stat"><div class="stat-num">5</div><div class="stat-label">覆盖竞对</div></div>
+  <div class="stat"><div class="stat-num">4</div><div class="stat-label">模型更新</div></div>
+  <div class="stat"><div class="stat-num">13</div><div class="stat-label">业务启示</div></div>
+</div>
+
+<div class="nav-bar">
+  <a class="nav-pill active" href="#sec-models" data-target="sec-models">🚀 模型与产品动态</a>
+  <a class="nav-pill" href="#sec-practice" data-target="sec-practice">⚡ 头部公司 AI 落地</a>
+  <a class="nav-pill" href="#sec-compete" data-target="sec-compete">🎯 竞对 AI 动态</a>
+  <a class="nav-pill" href="#sec-advice" data-target="sec-advice">📋 今日建议</a>
+</div>
+
+<div class="container">
+
+  <!-- ════ Section 1: 模型与产品动态 ════ -->
+  <div class="section" id="sec-models">
+    <div class="section-header">
+      <div class="section-icon" style="background:var(--orange-bg)">🚀</div>
+      <h2>模型与产品动态</h2>
+      <span class="count">4 条</span>
+    </div>
+
+    <div class="card" onclick="this.classList.toggle('open')">
+      <div class="card-num">1</div>
+      <span class="company-tag tag-ali">阿里巴巴</span>
+      <div class="card-title">Qwen 3.6-Plus 发布：首个真正的 Agentic 大模型，自主编程能力突破</div>
+      <div class="card-body">阿里于 4 月 2 日发布 Qwen3.6-Plus，被多家评测机构称为"第一个真正的 Agentic LLM"。支持 100 万 Token 上下文，能自主规划、测试、迭代代码直到产出可用方案。在前端开发和仓库级工程任务中，可完成从目标分解到最终交付的全流程。模型已通过阿里云 API 和 OpenRouter 免费提供。</div>
+      <div class="card-meta">
+        <a class="source-link" href="https://qwen.ai/blog?id=qwen3.6" target="_blank">Qwen 官方 ↗</a>
+        <a class="source-link" href="https://www.mindstudio.ai/blog/qwen-3-6-plus-review-agentic-coding-model" target="_blank">MindStudio ↗</a>
+      </div>
+      <div class="toggle-hint">点击展开业务启示 ▾</div>
+      <div class="implication">
+        <div class="implication-label">💡 对滴滴的启示</div>
+        <div class="implication-text">Qwen 3.6-Plus 的 Agentic 编程能力意味着可以让 AI 自主完成内部工具开发——从需求到可运行代码。滴滴拉美技术团队可以用它加速 CRM、运营后台等内部系统的迭代，降低对人力编程的依赖。阿里云 API 直接可用，无需自建基础设施。</div>
+      </div>
+    </div>
+
+    <div class="card" onclick="this.classList.toggle('open')">
+      <div class="card-num">2</div>
+      <span class="company-tag tag-google">Google</span>
+      <div class="card-title">Gemma 4 开源发布：Apache 2.0 许可，256K 上下文，Google 最强开源模型</div>
+      <div class="card-body">Google 发布最强开源模型系列 Gemma 4，采用 Apache 2.0 商业友好许可证，支持 256K 超长上下文。同时 Gemini 3.1 Pro 正式上线——在 GPQA Diamond 达到 94.3%，Gemini 应用月活突破 7.5 亿。Gemini 2.0 系列确认 6 月 1 日停服。</div>
+      <div class="card-meta">
+        <a class="source-link" href="https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-3-1-pro/" target="_blank">Google Blog ↗</a>
+        <a class="source-link" href="https://paddo.dev/blog/ai-roundup-april-2026/" target="_blank">Paddo Dev ↗</a>
+      </div>
+      <div class="toggle-hint">点击展开业务启示 ▾</div>
+      <div class="implication">
+        <div class="implication-label">💡 对滴滴的启示</div>
+        <div class="implication-text">Gemma 4 开源+商用免费，对滴滴自建推理服务是重大利好——可在本地部署强大模型，无 API 调用成本，数据不出域。256K 上下文适合处理复杂的多轮客服对话和订单分析。建议技术团队测试 Gemma 4 在拉美多语言场景（西/葡语）下的表现。</div>
+      </div>
+    </div>
+
+    <div class="card" onclick="this.classList.toggle('open')">
+      <div class="card-num">3</div>
+      <span class="company-tag tag-multi">OpenAI · Anthropic · Google</span>
+      <div class="card-title">三巨头联合打击中国 AI 模型抄袭，知识产权保护升级</div>
+      <div class="card-body">据 Bloomberg 报道，OpenAI、Anthropic 和 Google 联合采取措施应对中国模型复制问题。三家公司正在加强模型水印和追踪技术，防止模型权重和训练方法被未授权复制。这是 AI 行业首次出现三大竞对在知识产权保护上的正式合作。</div>
+      <div class="card-meta">
+        <a class="source-link" href="https://www.bloomberg.com/news/articles/2026-04-06/openai-anthropic-google-unite-to-combat-model-copying-in-china" target="_blank">Bloomberg ↗</a>
+      </div>
+      <div class="toggle-hint">点击展开业务启示 ▾</div>
+      <div class="implication">
+        <div class="implication-label">💡 对滴滴的启示</div>
+        <div class="implication-text">模型知识产权保护收紧可能影响国内模型生态——依赖"蒸馏"海外模型的国产模型可能面临合规风险。滴滴在选择国产模型供应商时需关注其训练数据和方法的合规性，避免潜在的供应链风险。</div>
+      </div>
+    </div>
+
+    <div class="card" onclick="this.classList.toggle('open')">
+      <div class="card-num">4</div>
+      <div class="card-title">Runware 获 5000 万美元 A 轮：Sonic 推理引擎，单 API 聚合数十万 AI 模型</div>
+      <div class="card-body">AI 推理基础设施初创公司 Runware 完成 5000 万美元 A 轮融资，其"Sonic 推理引擎"通过单一 API 聚合数十万个 AI 模型，声称比传统数据中心部署速度更快、成本更低。这反映了 AI 基础设施层的资本热度正从模型训练转向推理优化。</div>
+      <div class="card-meta">
+        <a class="source-link" href="https://aifundingtracker.com/" target="_blank">AI Funding Tracker ↗</a>
+      </div>
+      <div class="toggle-hint">点击展开业务启示 ▾</div>
+      <div class="implication">
+        <div class="implication-label">💡 对滴滴的启示</div>
+        <div class="implication-text">推理成本是 AI 规模化落地的关键瓶颈。类似 Runware 的推理聚合服务可以帮助滴滴在不同场景灵活切换模型（客服用大模型、推荐用小模型），同时降低总体推理成本。评估此类 Inference-as-a-Service 方案的性价比。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════ Section 2: 头部公司 AI 落地 ════ -->
+  <div class="section" id="sec-practice">
+    <div class="section-header">
+      <div class="section-icon" style="background:#F0E6FF">⚡</div>
+      <h2>头部公司 AI 落地</h2>
+      <span class="count">4 条</span>
+    </div>
+
+    <div class="card" onclick="this.classList.toggle('open')">
+      <div class="card-num">1</div>
+      <span class="company-tag tag-netflix">Netflix</span>
+      <div class="card-title">Netflix App 大改版：TikTok 式竖屏信息流 + OpenAI 合作对话式发现</div>
+      <div class="card-body">Netflix 于 Q1 财报电话会宣布 4 月底前推出全新移动端——引入竖屏短视频信息流（类似 TikTok），用户可点击片段直接观看全片、存入列表或分享。同时与 OpenAI 合作开发对话式内容发现工具，用自然语言描述想看的内容即可获得精准推荐。</div>
+      <div class="card-meta">
+        <a class="source-link" href="https://interestingengineering.com/ai-robotics/netflix-vertical-video-feed-ai-expansion" target="_blank">Interesting Engineering ↗</a>
+        <a class="source-link" href="https://finance.yahoo.com/sectors/technology/articles/netflix-plans-add-vertical-video-131718526.html" target="_blank">Yahoo Finance ↗</a>
+      </div>
+      <div class="toggle-hint">点击展开业务启示 ▾</div>
+      <div class="implication">
+        <div class="implication-label">💡 对滴滴的启示</div>
+        <div class="implication-text">Netflix 的"竖屏短视频+AI 推荐"组合拳值得外卖场景借鉴——想象用户打开滴滴外卖，看到的是商家美食短视频流，边刷边点单。对话式发现同理："想吃什么"→AI 推荐→一键下单。这是从"搜索式下单"到"发现式下单"的范式转变。</div>
+      </div>
+    </div>
+
+    <div class="card" onclick="this.classList.toggle('open')">
+      <div class="card-num">2</div>
+      <span class="company-tag tag-airbnb">Airbnb</span>
+      <div class="card-title">Airbnb AI 原生转型：1/3 客服自动化，Meta AI 高管任 CTO</div>
+      <div class="card-body">Airbnb 正从"带 AI 功能的平台"转型为"AI 原生旅行平台"。已成功自动化 1/3 客户支持，正从文字客服扩展到多语言 AI 语音客服。任命 Meta AI 高管为 CTO，通过支付、身份验证、保险等履约层构建 AI 竞争壁垒。CEO Brian Chesky 判断：纯搜索类 AI 平台无法替代 Airbnb 的全链路服务。</div>
+      <div class="card-meta">
+        <a class="source-link" href="https://www.rentalscaleup.com/airbnbs-ai-strategy-2026/" target="_blank">Rental Scale-Up ↗</a>
+      </div>
+      <div class="toggle-hint">点击展开业务启示 ▾</div>
+      <div class="implication">
+        <div class="implication-label">💡 对滴滴的启示</div>
+        <div class="implication-text">Airbnb 的思路与 DoorDash 一致——履约网络是 AI 无法替代的壁垒。滴滴拉美的骑手网络+出行运力就是这个壁垒。重点参考 Airbnb 1/3 客服自动化的路径：从文字到语音，多语言覆盖。拉美西/葡双语 AI 客服应该是近期可落地的高 ROI 项目。</div>
+      </div>
+    </div>
+
+    <div class="card" onclick="this.classList.toggle('open')">
+      <div class="card-num">3</div>
+      <span class="company-tag tag-spotify">Spotify</span>
+      <span class="company-tag tag-ubereats">Uber Eats</span>
+      <div class="card-title">Spotify + Uber Eats 接入 ChatGPT：AI 平台成为新的超级入口</div>
+      <div class="card-body">Spotify 通过 ChatGPT 集成让用户用自然语言创建个性化歌单，直接同步到 Spotify App。Uber Eats 美国用户可在 ChatGPT 中浏览餐厅和菜单，对话式下单后跳转 App 完成支付。ChatGPT 正在从聊天工具演变为连接各类服务的超级入口。</div>
+      <div class="card-meta">
+        <a class="source-link" href="https://techcrunch.com/2026/03/14/how-to-use-the-new-chatgpt-app-integrations-including-doordash-spotify-uber-and-others/" target="_blank">TechCrunch ↗</a>
+      </div>
+      <div class="toggle-hint">点击展开业务启示 ▾</div>
+      <div class="implication">
+        <div class="implication-label">💡 对滴滴的启示</div>
+        <div class="implication-text">ChatGPT 集成正在成为标配——Spotify、Uber Eats、DoorDash 都已接入。滴滴拉美如果不尽快建立与主流 AI 平台的下单接口，就会在 AI 入口争夺战中失去先机。同时，这验证了"AI 超级入口"趋势：用户越来越习惯通过一个 AI 界面完成所有事。</div>
+      </div>
+    </div>
+
+    <div class="card" onclick="this.classList.toggle('open')">
+      <div class="card-num">4</div>
+      <span class="company-tag tag-ali">阿里巴巴</span>
+      <div class="card-title">千问 App 月活破亿，AI 超级入口之战白热化</div>
+      <div class="card-body">阿里千问 App 月活达到 1 亿，与字节豆包（1.63 亿月活）形成中国 AI 消费应用双雄格局。千问已接入淘宝、支付宝、高德等阿里全生态 400+ AI 办事功能。腾讯、百度同步加大投入——春节期间阿里 30 亿、腾讯 10 亿、百度 5 亿红包激励 AI 用户争夺。</div>
+      <div class="card-meta">
+        <a class="source-link" href="https://www.ofweek.com/ai/2026-01/ART-201700-8420-30678811.html" target="_blank">OFweek ↗</a>
+        <a class="source-link" href="https://www.chinanews.com.cn/cj/2026/02-27/10577322.shtml" target="_blank">中新网 ↗</a>
+      </div>
+      <div class="toggle-hint">点击展开业务启示 ▾</div>
+      <div class="implication">
+        <div class="implication-label">💡 对滴滴的启示</div>
+        <div class="implication-text">中国 AI 超级入口战已经打响——千问串联了外卖（淘宝闪购）和出行（高德），豆包有字节的抖音生态。如果用户习惯通过 AI 入口叫外卖/打车，滴滴在中国市场面临被中间化的风险。必须加速自有 App 的 AI 能力建设，同时确保被主流 AI 入口调用。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════ Section 3: 竞对 AI 动态 ════ -->
+  <div class="section" id="sec-compete">
+    <div class="section-header">
+      <div class="section-icon" style="background:#E6F7F0">🎯</div>
+      <h2>竞对 AI 动态</h2>
+      <span class="count">5 条</span>
+    </div>
+
+    <div class="card" onclick="this.classList.toggle('open')">
+      <div class="card-num">1</div>
+      <span class="company-tag tag-ifood">iFood · 拉美</span>
+      <div class="card-title">iFood 深化 SAP AI 合作，内部 ISA 智能助手上线，iFood Move 2026 预告</div>
+      <div class="card-body">iFood 与 SAP 扩展 AI 合作，在 SAP 平台上开发企业级 AI 应用，聚焦效率和业务价值提升。自研企业内部智能助手 ISA 已接入核心业务系统。拉美最大餐饮活动 iFood Move 2026 定于 9 月在圣保罗举行，预计 12000+ 参与者——AI 是核心议题。</div>
+      <div class="card-meta">
+        <a class="source-link" href="https://news.sap.com/brazil/2026/01/ifood-amplia-uso-de-inteligencia-artificial-com-solucoes-sap-para-acelerar-inovacao/" target="_blank">SAP News ↗</a>
+        <a class="source-link" href="https://institucional.ifood.com.br/restaurantes/ifood-move-2026/" target="_blank">iFood ↗</a>
+      </div>
+      <div class="toggle-hint">点击展开竞对分析 ▾</div>
+      <div class="implication">
+        <div class="implication-label">🎯 竞对分析</div>
+        <div class="implication-text">iFood 的 AI 战略已经从产品层深入到企业管理层（SAP 集成），说明其 AI 化不只是面向用户的花活，而是全链路降本增效。建议派团队参加 9 月的 iFood Move 2026，近距离了解拉美外卖 AI 前沿。</div>
+      </div>
+    </div>
+
+    <div class="card" onclick="this.classList.toggle('open')">
+      <div class="card-num">2</div>
+      <span class="company-tag tag-doordash">DoorDash · 美国</span>
+      <span class="company-tag tag-ubereats">Uber · 美国</span>
+      <div class="card-title">外卖骑手变 AI 数据采集员：DoorDash Tasks + Uber AI Solutions</div>
+      <div class="card-body">DoorDash 推出付费任务程序，让骑手在空闲时录制西班牙语对话、拍摄家务活动等，为 AI 和机器人系统生成训练数据。Uber 随后跟进，在司机 App 中新增"数字任务"板块——上传餐厅菜单、录制多语言音频。零工经济正在成为 AI 的训练数据层。</div>
+      <div class="card-meta">
+        <a class="source-link" href="https://www.pymnts.com/artificial-intelligence-2/2026/the-gig-economy-is-now-the-training-layer-for-ai/" target="_blank">PYMNTS ↗</a>
+      </div>
+      <div class="toggle-hint">点击展开竞对分析 ▾</div>
+      <div class="implication">
+        <div class="implication-label">🎯 竞对分析</div>
+        <div class="implication-text">这是一个精妙的飞轮：骑手贡献本地化数据→AI 模型更精准→配送体验更好→更多订单→更多骑手。滴滴拉美有大量西/葡语骑手资源，完全可以复制这个模式——让骑手在等单间隙完成 AI 训练任务（拍菜单、录语音、标注地址），同时给骑手增加收入来源。</div>
+      </div>
+    </div>
+
+    <div class="card" onclick="this.classList.toggle('open')">
+      <div class="card-num">3</div>
+      <span class="company-tag tag-meituan">美团 · 中国</span>
+      <div class="card-title">美团首款 AI Agent 产品"小美"App 上线，搭载自研 LongCat 模型</div>
+      <div class="card-body">美团推出首款独立 AI Agent 产品"小美"App，搭载自研 LongCat-Flash-Chat 模型，用于外卖下单、餐厅推荐、订座导航等本地生活全场景。商家端推出 AI 助手"团团"，用户端内测"问小袋"和 AI 图像生成。美团的 AI 策略正从工具增强转向 Agent 原生。</div>
+      <div class="card-meta">
+        <a class="source-link" href="https://www.stcn.com/article/detail/3336379.html" target="_blank">证券时报 ↗</a>
+      </div>
+      <div class="toggle-hint">点击展开竞对分析 ▾</div>
+      <div class="implication">
+        <div class="implication-label">🎯 竞对分析</div>
+        <div class="implication-text">美团独立推出 AI Agent App 是一个信号——他们认为 AI 入口足够重要，值得做一个独立应用而不只是功能嵌入。滴滴需要思考：是在主 App 内嵌 AI 助手，还是做独立 AI 入口？美团的"小美"可以成为参照实验。</div>
+      </div>
+    </div>
+
+    <div class="card" onclick="this.classList.toggle('open')">
+      <div class="card-num">4</div>
+      <span class="company-tag tag-doordash">DoorDash · 美国</span>
+      <div class="card-title">DoorDash AI 美化菜品照片：低质图片自动增强光线、构图和摆盘</div>
+      <div class="card-body">DoorDash 使用 AI 检测并增强低质量菜品照片——自动优化光线、分辨率、构图和摆盘效果，帮助商家更好地展示菜品。这是一个低成本高收益的 AI 应用：不需要商家配合，平台自动完成，直接提升转化率。</div>
+      <div class="card-meta">
+        <a class="source-link" href="https://www.today.com/food/news/food-delivery-ai-photos-rcna259748" target="_blank">TODAY ↗</a>
+      </div>
+      <div class="toggle-hint">点击展开竞对分析 ▾</div>
+      <div class="implication">
+        <div class="implication-label">🎯 竞对分析</div>
+        <div class="implication-text">这是今天最值得直接复制的功能——技术实现不复杂（图像增强模型已经很成熟），但对转化率影响大。拉美很多中小商家的菜品照片质量很差，AI 自动美化可以立即提升整体平台品质感。建议作为短期可落地项目推进。</div>
+      </div>
+    </div>
+
+    <div class="card" onclick="this.classList.toggle('open')">
+      <div class="card-num">5</div>
+      <span class="company-tag tag-ifood">iFood · 拉美</span>
+      <div class="card-title">iFood 自研 AI 驱动增长：100+ 自研模型运行，AWS 深度合作</div>
+      <div class="card-body">iFood 选择自研而非依赖第三方 AI 工具，目前超过 100 个自研 AI 模型在日常运行。与 AWS 深度合作建设 AI 基础设施，并开设专门的 Gen AI 招聘页面（carreiras.ifood.com.br/gen-ai），表明其正在大规模扩建 AI 团队。</div>
+      <div class="card-meta">
+        <a class="source-link" href="https://aws.amazon.com/solutions/case-studies/ifoodai/" target="_blank">AWS ↗</a>
+        <a class="source-link" href="https://carreiras.ifood.com.br/gen-ai/" target="_blank">iFood Careers ↗</a>
+      </div>
+      <div class="toggle-hint">点击展开竞对分析 ▾</div>
+      <div class="implication">
+        <div class="implication-label">🎯 竞对分析</div>
+        <div class="implication-text">iFood 坚持自研 AI 模型而非简单调用 API，体现了长期主义的技术战略。滴滴需要评估：在拉美市场，是走"API 调用快速上线"还是"自研模型长期投入"路线？短期看 API 更快，长期看自研有数据飞轮优势。可以考虑混合策略。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════ Section 4: 今日建议 ════ -->
+  <div class="section" id="sec-advice">
+    <div class="section-header">
+      <div class="section-icon" style="background:#FFF3E0">📋</div>
+      <h2>今日建议</h2>
+    </div>
+
+    <div class="verdict">
+      <h3>本日最值得关注</h3>
+      <p>本周两大趋势加速浮现：<span class="highlight">AI 超级入口之战全面开打</span>——ChatGPT 已集成 DoorDash/Uber Eats/Spotify，阿里千问月活破亿串联全生态，Netflix 引入对话式发现。<span class="highlight">外卖平台正从"AI 使用者"变成"AI 数据生产者"</span>——DoorDash 和 Uber 让骑手变成 AI 训练数据采集员。</p>
+      <p>对滴滴拉美而言，<span class="highlight">AI 入口接入（防止被旁路）</span>和<span class="highlight">本地化数据飞轮（骑手数据采集）</span>是本周最紧迫的两个行动方向。</p>
+    </div>
+
+    <div class="action-item">
+      <p><span class="action-num">1.</span> 启动 ChatGPT/Gemini 下单集成评估：研究 DoorDash、Uber Eats 的 ChatGPT 集成方案，评估滴滴拉美接入的技术路径和优先级</p>
+    </div>
+    <div class="action-item">
+      <p><span class="action-num">2.</span> 立项"骑手 AI 任务"试点：参考 DoorDash Tasks，设计拉美骑手在等单间隙可完成的 AI 数据采集任务（拍菜单、录西/葡语音频、标注地址）</p>
+    </div>
+    <div class="action-item">
+      <p><span class="action-num">3.</span> 快速落地 AI 菜品图片增强：参考 DoorDash，用现成的图像增强模型自动优化平台上低质商家图片，预计 2-4 周可上线</p>
+    </div>
+    <div class="action-item">
+      <p><span class="action-num">4.</span> 测试 Gemma 4 和 Qwen 3.6-Plus 在西/葡语场景的表现：两个模型都免费可用，适合做拉美多语言 AI 客服和推荐的 POC</p>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">AI 行业情报助手 · 为滴滴拉美业务定制 · 数据来源为公开信息</div>
+
+<script>
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.style.opacity='1'; e.target.style.transform='translateY(0)'; }});
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.card, .verdict, .action-item').forEach(el => {
+    el.style.opacity='0'; el.style.transform='translateY(16px)';
+    el.style.transition='opacity 0.5s ease, transform 0.5s ease, box-shadow 0.2s ease, border-color 0.2s ease';
+    revealObserver.observe(el);
+  });
+  document.querySelectorAll('.nav-pill').forEach(pill => {
+    pill.addEventListener('click', e => {
+      e.preventDefault();
+      const target = document.getElementById(pill.dataset.target);
+      if (target) {
+        const navH = document.querySelector('.nav-bar').offsetHeight;
+        window.scrollTo({ top: target.getBoundingClientRect().top + window.scrollY - navH - 12, behavior: 'smooth' });
+      }
+    });
+  });
+  const sections = document.querySelectorAll('.section[id]');
+  const pills = document.querySelectorAll('.nav-pill');
+  const spyObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) {
+      pills.forEach(p => p.classList.remove('active'));
+      const m = document.querySelector(`.nav-pill[data-target="${e.target.id}"]`);
+      if (m) m.classList.add('active');
+    }});
+  }, { rootMargin: '-40% 0px -55% 0px' });
+  sections.forEach(s => spyObserver.observe(s));
+</script>
+</body>
+</html>
