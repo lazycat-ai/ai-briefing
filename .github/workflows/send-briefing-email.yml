@@ -1,0 +1,93 @@
+name: Send AI Briefing Email
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'briefings/*.html'
+
+jobs:
+  send-email:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Detect new briefing
+        id: detect
+        run: |
+          # Find newly added HTML briefing files (exclude wechat.md)
+          NEW_FILE=$(git diff --name-only --diff-filter=A HEAD~1 HEAD -- 'briefings/*.html' | head -1)
+          if [ -z "$NEW_FILE" ]; then
+            echo "No new briefing HTML found, skipping."
+            echo "found=false" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          # Extract date from filename (e.g. briefings/2026-04-19.html -> 2026-04-19)
+          DATE=$(basename "$NEW_FILE" .html)
+          echo "date=$DATE" >> $GITHUB_OUTPUT
+          echo "found=true" >> $GITHUB_OUTPUT
+          echo "Detected new briefing: $DATE"
+
+      - name: Send Buttondown email
+        if: steps.detect.outputs.found == 'true'
+        env:
+          BUTTONDOWN_API_KEY: ${{ secrets.BUTTONDOWN_API_KEY }}
+          BRIEFING_DATE: ${{ steps.detect.outputs.date }}
+        run: |
+          WECHAT_FILE="briefings/${BRIEFING_DATE}-wechat.md"
+
+          if [ ! -f "$WECHAT_FILE" ]; then
+            echo "Warning: $WECHAT_FILE not found, skipping email."
+            exit 0
+          fi
+
+          # Determine day of week in Chinese
+          DAY_OF_WEEK=$(python3 -c "
+          import datetime
+          d = datetime.date.fromisoformat('${BRIEFING_DATE}')
+          days = ['星期一','星期二','星期三','星期四','星期五','星期六','星期日']
+          print(days[d.weekday()])
+          ")
+
+          DISPLAY_DATE=$(echo "$BRIEFING_DATE" | tr '-' '.')
+
+          python3 -c "
+          import json, urllib.request, os, sys
+
+          date = os.environ['BRIEFING_DATE']
+          api_key = os.environ['BUTTONDOWN_API_KEY']
+
+          with open('briefings/${BRIEFING_DATE}-wechat.md', 'r') as f:
+              body = f.read()
+
+          body += '\n\n📱 查看完整交互版日报：https://joeyclaw996.github.io/ai-briefing-site/briefings/${BRIEFING_DATE}.html'
+
+          data = json.dumps({
+              'subject': 'AI 行业日报 | ${DISPLAY_DATE} ${DAY_OF_WEEK}',
+              'body': body,
+              'status': 'about_to_send'
+          }).encode()
+
+          req = urllib.request.Request(
+              'https://api.buttondown.com/v1/emails',
+              data=data,
+              headers={
+                  'Authorization': f'Token {api_key}',
+                  'Content-Type': 'application/json',
+                  'X-Buttondown-Live-Dangerously': 'true'
+              },
+              method='POST'
+          )
+
+          try:
+              resp = urllib.request.urlopen(req)
+              print(f'Email sent successfully! Status: {resp.status}')
+          except Exception as e:
+              print(f'Email send failed: {e}', file=sys.stderr)
+              if hasattr(e, 'read'):
+                  print(f'Response: {e.read().decode()}', file=sys.stderr)
+              sys.exit(1)
+          "
